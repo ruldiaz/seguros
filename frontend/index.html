@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>AIT — Seguros para auto en Tuxtla Gutiérrez, Chiapas</title>
+  <meta name="description" content="Cotiza, compra y administra tu seguro automotriz en minutos. Cobertura amplia, precios claros y asistencia 24/7." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg:#0a2540;          /* azul oscuro principal */
+      --bg-2:#0f2f55;        /* tono profundo para secciones */
+      --brand:#1a73e8;       /* acento */
+      --text:#e8eef6;        /* texto claro */
+      --muted:#b8c7da;       /* texto secundario */
+      --card:#0f2033;        /* tarjetas */
+      --success:#22c55e;
+      --warning:#f59e0b;
+      --danger:#ef4444;
+      --shadow: 0 10px 30px rgba(0,0,0,.25);
+      --radius: 18px;
+    }
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;
+      font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,"Apple Color Emoji","Segoe UI Emoji";
+      color:var(--text);
+      background:linear-gradient(180deg,var(--bg) 0%, #081a2c 60%, #071521 100%);
+    }
+    a{color:inherit;text-decoration:none}
+    .container{max-width:1200px;margin:0 auto;padding:0 20px}
+
+    /* NAV */
+    .nav{position:sticky;top:0;z-index:50;background:rgba(7,21,33,.75);backdrop-filter:saturate(180%) blur(14px);border-bottom:1px solid rgba(255,255,255,.06)}
+    .nav-inner{display:flex;align-items:center;justify-content:space-between;height:68px}
+    .brand{display:flex;gap:10px;align-items:center;font-weight:800;letter-spacing:.4px}
+    .brand-badge{width:36px;height:36px;border-radius:12px;display:grid;place-items:center;background:linear-gradient(135deg,var(--brand),#7cb6ff);box-shadow:var(--shadow)}
+    .brand svg{width:18px;height:18px}
+    .nav-links{display:flex;gap:22px;align-items:center}
+    .nav-links a{opacity:.9}
+    .nav-links a:hover{opacity:1}
+    .btn{display:inline-flex;align-items:center;gap:10px;border:none;border-radius:999px;padding:12px 18px;font-weight:600;cursor:pointer;transition:.2s transform, .2s box-shadow}
+    .btn:hover{transform:translateY(-1px)}
+    .btn:active{transform:translateY(0)}
+    .btn-primary{background:linear-gradient(135deg,var(--brand),#5aa2ff);color:white;box-shadow:0 8px 24px rgba(26,115,232,.35)}
+    .btn-outline{background:transparent;color:var(--text);border:1px solid rgba(255,255,255,.14)}
+    .mobile-toggle{display:none}
+
+    /* HERO */
+    .hero{padding:80px 0 40px}
+    .hero-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:40px;align-items:center}
+    .hero h1{font-size:clamp(28px, 4vw, 54px);line-height:1.05;margin:0 0 14px}
+    .hero p{font-size:clamp(16px, 2vw, 20px);color:var(--muted);margin:0 0 24px}
+    .hero-card{background:linear-gradient(180deg,rgba(255,255,255,.06),rgba(255,255,255,.02));border:1px solid rgba(255,255,255,.08);padding:22px;border-radius:var(--radius);box-shadow:var(--shadow)}
+    .badge{display:inline-block;padding:8px 12px;border-radius:999px;background:rgba(26,115,232,.14);color:#cfe3ff;border:1px solid rgba(26,115,232,.35);font-weight:600;font-size:12px;letter-spacing:.3px}
+
+    /* FORMS */
+    .form{display:grid;gap:14px}
+    .row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    .field{display:grid;gap:8px}
+    label{font-size:13px;color:var(--muted)}
+    input, select, textarea{width:100%;padding:14px 14px;border-radius:12px;background:#091a2a;border:1px solid rgba(255,255,255,.1);color:var(--text);outline:none}
+    input:focus, select:focus, textarea:focus{border-color:#5aa2ff;box-shadow:0 0 0 4px rgba(90,162,255,.12)}
+    .help{font-size:12px;color:var(--muted)}
+    .form-actions{display:flex;gap:12px;align-items:center}
+    .note{font-size:12px;color:var(--muted)}
+    .pill{display:inline-flex;gap:8px;align-items:center;padding:8px 12px;border-radius:999px;background:#0a1b2b;border:1px solid rgba(255,255,255,.08)}
+
+    /* SECTIONS */
+    section{padding:72px 0}
+    .section-title{font-size:28px;margin:0 0 16px}
+    .section-sub{color:var(--muted);margin:0 0 28px}
+    .grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+    .card{background:linear-gradient(180deg,rgba(255,255,255,.05),rgba(255,255,255,.02));border:1px solid rgba(255,255,255,.08);padding:20px;border-radius:var(--radius)}
+
+    /* PRICING */
+    .pricing{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+    .price-card{position:relative}
+    .price{font-size:36px;font-weight:800}
+    .price small{font-weight:600;color:var(--muted);font-size:14px}
+    .ribbon{position:absolute;top:16px;right:16px;background:var(--success);color:#06220f;padding:6px 10px;border-radius:999px;font-size:12px;font-weight:800}
+
+    /* FAQ */
+    .faq{display:grid;gap:12px}
+    details{background:#0a1b2b;border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:14px}
+    summary{cursor:pointer;font-weight:600}
+
+    /* FOOTER */
+    footer{padding:28px 0;border-top:1px solid rgba(255,255,255,.08);color:var(--muted)}
+
+    /* RESPONSIVE */
+    @media(max-width:1024px){
+      .hero-grid{grid-template-columns:1fr}
+      .grid-3,.pricing,.row{grid-template-columns:1fr}
+    }
+    @media(max-width:720px){
+      .nav-links{display:none}
+      .mobile-toggle{display:flex}
+    }
+  </style>
+</head>
+<body>
+  <!-- NAV -->
+  <nav class="nav">
+    <div class="container nav-inner">
+      <a class="brand" href="#inicio" aria-label="SegurAuto">
+        <span class="brand-badge" aria-hidden="true">
+          <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 13l2-2m0 0l7-7 7 7M5 11v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0h6"/>
+          </svg>
+        </span>
+        AIT Seguros en Tuxtla Gutiérrez, Chiapas
+      </a>
+      <div class="nav-links" role="navigation" aria-label="Secciones">
+        <a href="#beneficios">Beneficios</a>
+        <a href="#planes">Planes</a>
+        <a href="#cotizar">Cotizar</a>
+        <a href="#faq">FAQ</a>
+        <a class="btn btn-outline" href="#contacto">Contacto</a>
+        <a class="btn btn-primary" href="#cotizar">Cotiza ahora</a>
+      </div>
+      <button class="btn btn-outline mobile-toggle" aria-label="Abrir menú" onclick="toggleMobileMenu()">Menú</button>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <header id="inicio" class="hero">
+    <div class="container hero-grid">
+      <div>
+        <span class="badge">Seguro automotriz sin complicaciones</span>
+        <h1>Protege tu auto en minutos. <br/>Precios claros, cobertura amplia y asistencia 24/7.</h1>
+        <p>Contrata en línea, sin letras chiquitas. Somos expertos en seguridad vial y atención inmediata.</p>
+        <div class="form-actions">
+          <a class="btn btn-primary" href="#cotizar">Comenzar cotización</a>
+          <a class="btn btn-outline" href="#beneficios">Ver beneficios</a>
+        </div>
+        <p class="note" style="margin-top:10px">Cotizaciones reales en menos de 2 minutos • Cancelación flexible • También puedes cotizar en el tel. 961 61 5 81 26</p>
+      </div>
+      <div class="hero-card" aria-label="Cotizador rápido">
+        <form id="quick-quote" class="form" novalidate>
+          <div class="row">
+            <div class="field">
+              <label for="nombre">Nombre</label>
+              <input id="nombre" name="nombre" placeholder="Tu nombre" required />
+            </div>
+            <div class="field">
+              <label for="tel">Teléfono</label>
+              <input id="tel" name="tel" placeholder="55 1234 5678" inputmode="tel" required />
+            </div>
+          </div>
+          <div class="row">
+            <div class="field">
+              <label for="marca">Marca</label>
+              <input id="marca" name="marca" placeholder="Ej. Nissan" required />
+            </div>
+            <div class="field">
+              <label for="modelo">Modelo</label>
+              <input id="modelo" name="modelo" placeholder="Versa 2021" required />
+            </div>
+          </div>
+          <div class="row">
+            <div class="field">
+              <label for="cp">Código Postal</label>
+              <input id="cp" name="cp" placeholder="01234" pattern="^[0-9]{5}$" required />
+              <span class="help">Solo 5 dígitos</span>
+            </div>
+            <div class="field">
+              <label for="paquete">Tipo de paquete</label>
+              <select id="paquete" name="paquete" required>
+                <option value="" disabled selected>Selecciona…</option>
+                <option>Amplia</option>
+                <option>Limitada</option>
+                <option>Responsabilidad civil</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-actions">
+            <button class="btn btn-primary" type="submit">Obtener precio</button>
+            <span id="quote-msg" class="pill" aria-live="polite">Listo para cotizar</span>
+          </div>
+          <p class="note">Al continuar aceptas nuestro <a href="#legal">Aviso de privacidad</a>.</p>
+        </form>
+      </div>
+    </div>
+  </header>
+
+  <!-- REDES SOCIALES -->
+  <section id="redes" class="redes-sociales" style="text-align: center;">
+    <h2>¡Síguenos en nuestras redes sociales!</h2>
+    <ul>
+      <a href="https://www.facebook.com/aitseguros"><img src="public/images/facebook-logo.png" alt="facebook logo" width="30px"></a>
+      <a href="https://www.instagram.com/aitseguros"><img src="public/images/instagram-logo.png" alt="instagram logo" width="30px"></a>
+    </ul>
+  </section> 
+
+  <!-- BENEFICIOS -->
+  <section id="beneficios">
+    <div class="container">
+      <h2 class="section-title">¿Por qué elegir SegurAuto?</h2>
+      <p class="section-sub">Transparencia total, atención humana y tecnología para que tu seguro funcione cuando de verdad lo necesitas.</p>
+      <div class="grid-3">
+        <article class="card">
+          <h3>Asistencia 24/7</h3>
+          <p class="section-sub">Grúa, cambio de llanta, paso de corriente y más. Siempre contigo.</p>
+        </article>
+        <article class="card">
+          <h3>Reparación en red certificada</h3>
+          <p class="section-sub">Talleres verificados y refacciones originales para tu tranquilidad.</p>
+        </article>
+        <article class="card">
+          <h3>Precios claros</h3>
+          <p class="section-sub">Sin sorpresas: lo que ves es lo que pagas, con facilidades de pago.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- PLANES -->
+  <section id="planes" style="background:linear-gradient(180deg,var(--bg-2),#0a2138)">
+    <div class="container">
+      <h2 class="section-title">Planes de cobertura</h2>
+      <p class="section-sub">Elige el plan que mejor se adapte a tu uso, presupuesto y tipo de vehículo.</p>
+      <div class="pricing">
+        <article class="card price-card">
+          <div class="ribbon" aria-hidden="true">Básico</div>
+          <h3>Responsabilidad Civil</h3>
+          <p class="section-sub">Cumple con lo indispensable para circular.</p>
+          <p class="price">$3,990 <small>/año</small></p>
+          <ul>
+            <li>Daños a terceros</li>
+            <li>Asistencia vial</li>
+            <li>Defensa legal</li>
+          </ul>
+          <br/>
+          <a href="#cotizar" class="btn btn-outline">Cotizar</a>
+        </article>
+        <article class="card price-card" style="border:2px solid rgba(26,115,232,.6)">
+          <div class="ribbon" style="background:var(--brand);color:#031225">Popular</div>
+          <h3>Limitada</h3>
+          <p class="section-sub">Más protección a un precio accesible.</p>
+          <p class="price">$6,990 <small>/año</small></p>
+          <ul>
+            <li>Robo total</li>
+            <li>Daños a terceros</li>
+            <li>Asistencia vial + Auto sustituto</li>
+          </ul>
+          <br/>
+          <a href="#cotizar" class="btn btn-primary">Cotizar</a>
+        </article>
+        <article class="card price-card">
+          <div class="ribbon" style="background:var(--success);color:#06220f">Premium</div>
+          <h3>Amplia</h3>
+          <p class="section-sub">La máxima cobertura para estrenar con paz mental.</p>
+          <p class="price">$9,990 <small>/año</small></p>
+          <ul>
+            <li>Daños materiales</li>
+            <li>Robo total</li>
+            <li>Accidentes al conductor</li>
+          </ul>
+          <br/>
+          <a href="#cotizar" class="btn btn-outline">Cotizar</a>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- COTIZAR -->
+  <section id="cotizar">
+    <div class="container">
+      <h2 class="section-title">Cotiza en 2 minutos</h2>
+      <p class="section-sub">Completa el formulario y recibe un estimado inmediato en tu correo o WhatsApp.</p>
+      <div class="card">
+        <form id="full-quote" class="form" novalidate>
+          <div class="row">
+            <div class="field">
+              <label for="fullname">Nombre completo</label>
+              <input id="fullname" name="fullname" required placeholder="Nombre y apellidos" />
+            </div>
+            <div class="field">
+              <label for="email">Correo electrónico</label>
+              <input id="email" name="email" type="email" required placeholder="tucorreo@dominio.com" />
+            </div>
+          </div>
+          <div class="row">
+            <div class="field">
+              <label for="whatsapp">WhatsApp</label>
+              <input id="whatsapp" name="whatsapp" inputmode="tel" placeholder="+52 1 55 0000 0000" />
+              <span class="help">Opcional, pero acelera la atención.</span>
+            </div>
+            <div class="field">
+              <label for="cp2">Código Postal</label>
+              <input id="cp2" name="cp2" pattern="^[0-9]{5}$" required placeholder="01234" />
+            </div>
+          </div>
+          <div class="row">
+            <div class="field">
+              <label for="vehiculo">Vehículo</label>
+              <input id="vehiculo" name="vehiculo" required placeholder="Marca y modelo (ej. Mazda 3)" />
+            </div>
+            <div class="field">
+              <label for="anio">Año</label>
+              <input id="anio" name="anio" required pattern="^(19|20)\d{2}$" placeholder="2022" />
+            </div>
+          </div>
+          <div class="row">
+            <div class="field">
+              <label for="uso">Uso del vehículo</label>
+              <select id="uso" name="uso" required>
+                <option value="" disabled selected>Selecciona…</option>
+                <option>Personal</option>
+                <option>Uber/Didi</option>
+                <option>Comercial</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="plan">Plan preferido</label>
+              <select id="plan" name="plan" required>
+                <option value="" disabled selected>Selecciona…</option>
+                <option>Responsabilidad Civil</option>
+                <option>Limitada</option>
+                <option>Amplia</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-actions">
+            <button class="btn btn-primary" type="submit">Calcular estimado</button>
+            <span id="full-msg" class="pill" aria-live="polite">Esperando datos…</span>
+          </div>
+          <p class="note">Tus datos se usarán únicamente para contactarte con tu cotización.</p>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- TESTIMONIOS -->
+  <section>
+    <div class="container">
+      <h2 class="section-title">Lo que dicen nuestros clientes</h2>
+      <div class="grid-3">
+        <article class="card"><p>“Choqué de madrugada y la grúa llegó en 20 minutos. El proceso fue súper claro.”</p><p class="note">— María P.</p></article>
+        <article class="card"><p>“Me ayudaron a elegir el plan correcto para Uber. Atención muy humana.”</p><p class="note">— Luis R.</p></article>
+        <article class="card"><p>“Pagué a meses sin intereses y la póliza llegó al instante.”</p><p class="note">— Fernanda G.</p></article>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section id="faq" style="background:linear-gradient(180deg,var(--bg-2),#0a2138)">
+    <div class="container">
+      <h2 class="section-title">Preguntas frecuentes</h2>
+      <div class="faq">
+        <details>
+          <summary>¿En cuánto tiempo recibo mi póliza?</summary>
+          <p>Una vez realizado el pago, tu póliza digital se envía al instante por correo y WhatsApp.</p>
+        </details>
+        <details>
+          <summary>¿Puedo pagar a meses sin intereses?</summary>
+          <p>Sí, con tarjetas participantes. También aceptamos transferencia y SPEI.</p>
+        </details>
+        <details>
+          <summary>¿La cobertura aplica en todo México?</summary>
+          <p>Sí, y contamos con asistencia en carretera 24/7 a nivel nacional.</p>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACTO -->
+  <section id="contacto">
+    <div class="container">
+      <h2 class="section-title">Contacto</h2>
+      <div class="grid-3">
+        <div class="card">
+          <h3>Atención al cliente</h3>
+          <p class="section-sub">Lunes a sábado 8:00–20:00</p>
+          <p class="pill">Tel.: 961 61 5 81 26</p>
+        </div>
+        <div class="card">
+          <h3>Oficinas</h3>
+          <p class="section-sub">Tuxtla Gtz., Chiapas</p>
+          <p class="pill">Citas con previa confirmación</p>
+        </div>
+        <div class="card">
+          <h3>Correo</h3>
+          <p class="section-sub">soporte@segurauto.mx</p>
+          <p class="pill">Tiempo de respuesta &lt; 2 h</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer id="legal">
+    <div class="container" style="display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between">
+      <p>© <span id="year"></span> AIT seguros. Todos los derechos reservados.</p>
+      <div style="display:flex;gap:14px;align-items:center">
+        <a href="#" class="note">Términos</a>
+        <a href="#" class="note">Privacidad</a>
+        <a href="#inicio" class="btn btn-outline">Ir arriba</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Año dinámico
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // Menú móvil simple
+    function toggleMobileMenu(){
+      const links = document.querySelector('.nav-links');
+      if(!links) return;
+      links.style.display = links.style.display === 'flex' ? 'none' : 'flex';
+      if(links.style.display==='flex'){
+        links.style.flexDirection='column';
+        links.style.position='absolute';
+        links.style.top='68px';
+        links.style.right='20px';
+        links.style.background='#0a1b2b';
+        links.style.border='1px solid rgba(255,255,255,.12)';
+        links.style.padding='12px';
+        links.style.borderRadius='12px';
+      }
+    }
+
+    // Utilidad: formatear moneda MXN
+    function toMXN(n){
+      try{ return new Intl.NumberFormat('es-MX',{style:'currency',currency:'MXN',maximumFractionDigits:0}).format(n); }
+      catch(e){ return '$'+Math.round(n); }
+    }
+
+    // Simulación de cotización rápida
+    const quickForm = document.getElementById('quick-quote');
+    const qMsg = document.getElementById('quote-msg');
+
+    quickForm.addEventListener('submit', async (e)=>{
+      e.preventDefault();
+      
+      if(!quickForm.checkValidity()){
+        qMsg.textContent = 'Revisa los campos requeridos';
+        qMsg.style.background = '#2a0c0c';
+        return;
+      }
+      
+      qMsg.textContent = 'Consultando servidor…';
+      qMsg.style.background = '#1a2b3c';
+
+      try {
+        const formData = {
+          nombre: document.getElementById('nombre').value.trim(),
+          tel: document.getElementById('tel').value.trim(),
+          marca: document.getElementById('marca').value.trim(),
+          modelo: document.getElementById('modelo').value.trim(),
+          cp: document.getElementById('cp').value.trim(),
+          paquete: document.getElementById('paquete').value
+        };
+
+        console.log('Enviando datos:', formData);
+
+        const response = await fetch('http://localhost:4000/api/quotes/quick', {
+          method: 'POST',
+          headers: { 
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+          },
+          body: JSON.stringify(formData)
+        });
+
+        console.log('Response status:', response.status);
+
+        if (!response.ok) {
+          const errorData = await response.json().catch(() => ({}));
+          throw new Error(errorData.message || `Error ${response.status}`);
+        }
+
+        const data = await response.json();
+        console.log('Datos recibidos:', data);
+        
+        qMsg.textContent = `Estimado anual: ${data.anual} · mensual: ${data.mensual}`;
+        qMsg.style.background = '#0d2a1a';
+        qMsg.style.borderColor = 'rgba(34,197,94,.5)';
+        
+      } catch (error) {
+        console.error('Error completo:', error);
+        
+        if (error.name === 'TypeError' && error.message.includes('Failed to fetch')) {
+          qMsg.textContent = 'Error de conexión. Verifica que el servidor esté ejecutándose.';
+        } else {
+          qMsg.textContent = error.message || 'Error en la cotización';
+        }
+        
+        qMsg.style.background = '#2a0c0c';
+      }
+    });
+
+    // Cotización completa (demo)
+    const fullForm = document.getElementById('full-quote');
+    const fMsg = document.getElementById('full-msg');
+    fullForm.addEventListener('submit', async (e)=>{
+      e.preventDefault();
+      
+      if(!fullForm.checkValidity()){
+        fMsg.textContent = 'Faltan datos o son inválidos';
+        fMsg.style.background = '#2a0c0c';
+        return;
+      }
+      
+      fMsg.textContent = 'Generando estimado…';
+      fMsg.style.background = '#1a2b3c';
+
+      try {
+        const formData = {
+          fullname: document.getElementById('fullname').value.trim(),
+          email: document.getElementById('email').value.trim(),
+          whatsapp: document.getElementById('whatsapp').value.trim(),
+          cp2: document.getElementById('cp2').value.trim(),
+          vehiculo: document.getElementById('vehiculo').value.trim(),
+          anio: parseInt(document.getElementById('anio').value),
+          uso: document.getElementById('uso').value,
+          plan: document.getElementById('plan').value
+        };
+
+        const response = await fetch('http://localhost:4000/api/quotes', {
+          method: 'POST',
+          headers: { 
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+          },
+          body: JSON.stringify(formData)
+        });
+
+        if (!response.ok) {
+          const errorData = await response.json();
+          throw new Error(errorData.message || `Error ${response.status}`);
+        }
+
+        const data = await response.json();
+        
+        fMsg.textContent = `Tu estimado: ${data.anual} al año · ${data.mensual} al mes. Te escribiremos en breve.`;
+        fMsg.style.background = '#0d2a1a';
+        
+      } catch (error) {
+        console.error('Error:', error);
+        fMsg.textContent = error.message || 'Error en la cotización';
+        fMsg.style.background = '#2a0c0c';
+      }
+    });
+  </script>
+</body>
+</html>
