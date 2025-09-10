@@ -35,7 +35,7 @@ const verifyEmailConfig = async () => {
 // Llamar a la verificación al cargar el módulo
 verifyEmailConfig();
 
-// Eliminar o modificar sendQuoteEmail para que no envíe precios
+// En mailer.js
 async function sendQuoteEmail(quote) {
   if (!process.env.FROM_EMAIL || !quote.email) return;
   
@@ -43,7 +43,10 @@ async function sendQuoteEmail(quote) {
     <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
       <h2 style="color: #1a73e8;">Estimado ${quote.name}</h2>
       <p>Gracias por solicitar información en AIT Seguros.</p>
-      <p>Hemos recibido tu solicitud y nos pondremos en contacto contigo pronto con los precios actualizados.</p>
+      <p>Hemos recibido tu solicitud de cotización y nos pondremos en contacto contigo en breve con los precios actualizados.</p>
+      <p>Nuestro horario de atención es de Lunes a Sábado de 8:00 a 20:00 horas.</p>
+      <p>Si necesitas atención inmediata, puedes contactarnos al teléfono: <strong>961 61 5 81 26</strong></p>
+      <br/>
       <p style="color: #5f6368; font-size: 14px;">Atentamente,<br>El equipo de AIT Seguros</p>
     </div>
   `;
@@ -55,7 +58,7 @@ async function sendQuoteEmail(quote) {
       to: quote.email,
       subject: `Confirmación de solicitud - AIT Seguros`,
       html,
-      text: `Estimado ${quote.name}. Gracias por solicitar información. Nos pondremos en contacto contigo pronto con los precios actualizados.`
+      text: `Estimado ${quote.name}. Gracias por solicitar información en AIT Seguros. Hemos recibido tu solicitud de cotización y nos pondremos en contacto contigo en breve con los precios actualizados. Horario: Lunes a Sábado 8:00-20:00. Tel: 961 61 5 81 26.`
     });
     console.log('✅ Correo de confirmación enviado a:', quote.email);
     return true;

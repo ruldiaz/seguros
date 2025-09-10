@@ -32,16 +32,24 @@ exports.createQuote = async (req, res) => {
       plan: payload.plan,
       estimatedAnnual: 0,
       estimatedMonthly: 0,
-      status: 'pending', // Usa 'pending' en lugar de 'contact_request'
+      status: 'pending',
       quoteType: 'full'
     });
     
     await quote.save();
     
+    // ENVIAR CORREOS - Ahora solo confirmación sin precios
     try {
+      // Enviar correo de confirmación al cliente si tiene email
+      if (quote.email) {
+        await sendQuoteEmail(quote);
+      }
+      
+      // Enviar notificación al administrador
       await sendAdminNotification(quote, 'completa');
     } catch (emailError) {
-      console.error('Error enviando notificación admin:', emailError);
+      console.error('Error enviando correos:', emailError);
+      // No fallar la solicitud solo por error de correo
     }
     
     res.status(201).json({ 
@@ -74,17 +82,25 @@ exports.createQuickQuote = async (req, res) => {
       plan: normalizedPaquete,
       estimatedAnnual: 0,
       estimatedMonthly: 0,
-      status: 'quick_quote', // Usa 'quick_quote' que ya existe en el enum
+      status: 'quick_quote',
       quoteType: 'quick',
       usage: 'No especificado'
     });
     
     await quote.save();
     
+    // ENVIAR CORREOS - Ahora solo confirmación sin precios
     try {
+      // Enviar correo de confirmación al cliente si tiene email
+      if (quote.email) {
+        await sendQuoteEmail(quote);
+      }
+      
+      // Enviar notificación al administrador
       await sendAdminNotification(quote, 'rápida');
     } catch (emailError) {
-      console.error('Error enviando notificación admin:', emailError);
+      console.error('Error enviando correos:', emailError);
+      // No fallar la solicitud solo por error de correo
     }
     
     res.status(201).json({
