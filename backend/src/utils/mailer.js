@@ -1,20 +1,15 @@
 const nodemailer = require('nodemailer');
 
-// Crear el transporter con configuración mejorada
-const createTransporter = () => {
-  return nodemailer.createTransport({
-    service: 'gmail', // Usar el servicio 'gmail' en lugar de configuración manual
-    auth: {
-      user: process.env.EMAIL_USER,
-      pass: process.env.EMAIL_PASS
-    },
-    // Opciones adicionales para mejor compatibilidad
-    pool: true,
-    maxConnections: 1,
-    rateDelta: 20000,
-    rateLimit: 5
-  });
-};
+nodemailer.createTransport({
+  host: 'smtp.gmail.com',
+  port: 587,
+  secure: false, // STARTTLS
+  auth: {
+    user: process.env.EMAIL_USER,
+    pass: process.env.EMAIL_PASS
+  }
+});
+
 
 // Verificar la configuración de correo al iniciar
 const verifyEmailConfig = async () => {

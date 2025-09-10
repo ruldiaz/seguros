@@ -179,7 +179,7 @@
             </div>
           </div>
           <div class="form-actions">
-            <button class="btn btn-primary" type="submit">Obtener precio</button>
+            <button class="btn btn-primary" type="submit">Solicitar información</button>
             <span id="quote-msg" class="pill" aria-live="polite">Listo para cotizar</span>
           </div>
           <p class="note">Al continuar aceptas nuestro <a href="#legal">Aviso de privacidad</a>.</p>
@@ -229,7 +229,7 @@
           <div class="ribbon" aria-hidden="true">Básico</div>
           <h3>Responsabilidad Civil</h3>
           <p class="section-sub">Cumple con lo indispensable para circular.</p>
-          <p class="price">$3,990 <small>/año</small></p>
+          <p class="price">Desde <small>/año</small></p>
           <ul>
             <li>Daños a terceros</li>
             <li>Asistencia vial</li>
@@ -242,7 +242,7 @@
           <div class="ribbon" style="background:var(--brand);color:#031225">Popular</div>
           <h3>Limitada</h3>
           <p class="section-sub">Más protección a un precio accesible.</p>
-          <p class="price">$6,990 <small>/año</small></p>
+          <p class="price">Desde <small>/año</small></p>
           <ul>
             <li>Robo total</li>
             <li>Daños a terceros</li>
@@ -255,7 +255,7 @@
           <div class="ribbon" style="background:var(--success);color:#06220f">Premium</div>
           <h3>Amplia</h3>
           <p class="section-sub">La máxima cobertura para estrenar con paz mental.</p>
-          <p class="price">$9,990 <small>/año</small></p>
+          <p class="price">Desde <small>/año</small></p>
           <ul>
             <li>Daños materiales</li>
             <li>Robo total</li>
@@ -272,7 +272,7 @@
   <section id="cotizar">
     <div class="container">
       <h2 class="section-title">Cotiza en 2 minutos</h2>
-      <p class="section-sub">Completa el formulario y recibe un estimado inmediato en tu correo o WhatsApp.</p>
+      <p class="section-sub">Completa el formulario y nos comunicaremos contigo en breve con los precios actualizados.</p>
       <div class="card">
         <form id="full-quote" class="form" novalidate>
           <div class="row">
@@ -327,7 +327,7 @@
             </div>
           </div>
           <div class="form-actions">
-            <button class="btn btn-primary" type="submit">Calcular estimado</button>
+            <button class="btn btn-primary" type="submit">Solicitar información</button>
             <span id="full-msg" class="pill" aria-live="polite">Esperando datos…</span>
           </div>
           <p class="note">Tus datos se usarán únicamente para contactarte con tu cotización.</p>
@@ -341,9 +341,9 @@
     <div class="container">
       <h2 class="section-title">Lo que dicen nuestros clientes</h2>
       <div class="grid-3">
-        <article class="card"><p>“Choqué de madrugada y la grúa llegó en 20 minutos. El proceso fue súper claro.”</p><p class="note">— María P.</p></article>
-        <article class="card"><p>“Me ayudaron a elegir el plan correcto para Uber. Atención muy humana.”</p><p class="note">— Luis R.</p></article>
-        <article class="card"><p>“Pagué a meses sin intereses y la póliza llegó al instante.”</p><p class="note">— Fernanda G.</p></article>
+        <article class="card"><p>"Choqué de madrugada y la grúa llegó en 20 minutos. El proceso fue súper claro."</p><p class="note">— María P.</p></article>
+        <article class="card"><p>"Me ayudaron a elegir el plan correcto para Uber. Atención muy humana."</p><p class="note">— Luis R.</p></article>
+        <article class="card"><p>"Pagué a meses sin intereses y la póliza llegó al instante."</p><p class="note">— Fernanda G.</p></article>
       </div>
     </div>
   </section>
@@ -426,12 +426,6 @@
       }
     }
 
-    // Utilidad: formatear moneda MXN
-    function toMXN(n){
-      try{ return new Intl.NumberFormat('es-MX',{style:'currency',currency:'MXN',maximumFractionDigits:0}).format(n); }
-      catch(e){ return '$'+Math.round(n); }
-    }
-
     // Simulación de cotización rápida
     const quickForm = document.getElementById('quick-quote');
     const qMsg = document.getElementById('quote-msg');
@@ -445,7 +439,7 @@
         return;
       }
       
-      qMsg.textContent = 'Consultando servidor…';
+      qMsg.textContent = 'Enviando información…';
       qMsg.style.background = '#1a2b3c';
 
       try {
@@ -479,24 +473,28 @@
         const data = await response.json();
         console.log('Datos recibidos:', data);
         
-        qMsg.textContent = `Estimado anual: ${data.anual} · mensual: ${data.mensual}`;
+        // Cambiado: Mostrar mensaje de contacto en lugar de precios
+        qMsg.textContent = '¡Gracias! Nos comunicaremos contigo en breve';
         qMsg.style.background = '#0d2a1a';
         qMsg.style.borderColor = 'rgba(34,197,94,.5)';
+        
+        // Limpiar formulario
+        quickForm.reset();
         
       } catch (error) {
         console.error('Error completo:', error);
         
         if (error.name === 'TypeError' && error.message.includes('Failed to fetch')) {
-          qMsg.textContent = 'Error de conexión. Verifica que el servidor esté ejecutándose.';
+          qMsg.textContent = 'Error de conexión. Por favor, intenta nuevamente o contáctanos directamente.';
         } else {
-          qMsg.textContent = error.message || 'Error en la cotización';
+          qMsg.textContent = 'Error al enviar. Por favor, contáctanos directamente.';
         }
         
         qMsg.style.background = '#2a0c0c';
       }
     });
 
-    // Cotización completa (demo)
+    // Cotización completa
     const fullForm = document.getElementById('full-quote');
     const fMsg = document.getElementById('full-msg');
     fullForm.addEventListener('submit', async (e)=>{
@@ -508,7 +506,7 @@
         return;
       }
       
-      fMsg.textContent = 'Generando estimado…';
+      fMsg.textContent = 'Enviando información…';
       fMsg.style.background = '#1a2b3c';
 
       try {
@@ -539,12 +537,16 @@
 
         const data = await response.json();
         
-        fMsg.textContent = `Tu estimado: ${data.anual} al año · ${data.mensual} al mes. Te escribiremos en breve.`;
+        // Cambiado: Mostrar mensaje de contacto en lugar de precios
+        fMsg.textContent = '¡Gracias! Te contactaremos pronto con los precios actualizados';
         fMsg.style.background = '#0d2a1a';
+        
+        // Limpiar formulario
+        fullForm.reset();
         
       } catch (error) {
         console.error('Error:', error);
-        fMsg.textContent = error.message || 'Error en la cotización';
+        fMsg.textContent = 'Error al enviar. Por favor, contáctanos directamente.';
         fMsg.style.background = '#2a0c0c';
       }
     });
