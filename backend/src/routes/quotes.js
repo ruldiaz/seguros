@@ -26,4 +26,23 @@ router.post('/quick', [
 router.get('/', authMiddleware(['admin']), listQuotes);
 router.get('/:id', authMiddleware(['admin']), getQuote);
 
+// Webhook específico para notificaciones
+router.post('/webhook/notification', [
+  body('name').isLength({ min: 2 }),
+  body('contact').isLength({ min: 5 }),
+  body('message').isLength({ min: 10 })
+], async (req, res) => {
+  try {
+    const { name, contact, message, formType } = req.body;
+    
+    // Enviar correo de notificación
+    await sendAdminNotificationWebhook({ name, contact, message, formType });
+    
+    res.status(200).json({ message: 'Notificación enviada' });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'Error del servidor' });
+  }
+});
+
 module.exports = router;
