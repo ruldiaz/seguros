@@ -2,40 +2,22 @@ const { validationResult } = require('express-validator');
 const Quote = require('../models/Quote');
 const { sendQuoteEmail, sendAdminNotification } = require('../utils/mailer'); // Agregar sendAdminNotification
 
-function computeEstimate({ plan, usage, year, paquete }){
-  // Normalizar el nombre del plan/paquete
-  const planType = (paquete || plan || '').toLowerCase();
-  
-  let base = 4200;
-  const currentYear = new Date().getFullYear();
-  
-  // Ajustar por año del vehículo si está disponible
-  if (year) {
-    base += Math.max(0, (currentYear - year)) * 120;
-  }
-  
-  // Ajustar por uso si está disponible
-  if (usage && usage === 'Uber/Didi') base *= 1.35;
-  if (usage && usage === 'Comercial') base *= 1.5;
-  
-  // Ajustar por tipo de plan
-  if (planType.includes('limitada')) base *= 1.6;
-  if (planType.includes('amplia')) base *= 2.3;
-  
-  const anual = Math.round(Math.max(3500, base));
+// Reemplazar la función computeEstimate para que no calcule precios
+function computeEstimate() {
+  // Ya no calculamos precios, solo devolvemos valores nulos o mensaje
   return { 
-    anual, 
-    mensual: Math.round(anual / 12) 
+    anual: 0, 
+    mensual: 0 
   };
 }
 
+// Modificar createQuote para no enviar correos con precios
 exports.createQuote = async (req, res) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) return res.status(400).json({ errors: errors.array() });
   
   try {
     const payload = req.body;
-    const estimate = computeEstimate(payload);
     
     const quote = new Quote({
       name: payload.fullname || payload.name,
@@ -48,30 +30,22 @@ exports.createQuote = async (req, res) => {
       postalCode: payload.cp || payload.postalCode,
       usage: payload.uso || payload.usage,
       plan: payload.plan,
-      estimatedAnnual: estimate.anual,
-      estimatedMonthly: estimate.mensual
+      estimatedAnnual: 0, // Ya no almacenamos precios
+      estimatedMonthly: 0,
+      status: 'contact_request' // Nuevo estado
     });
     
     await quote.save();
     
-    // ENVIAR CORREOS - Modificar esta parte
+    // ENVIAR SOLO NOTIFICACIÓN AL ADMINISTRADOR (sin precios)
     try {
-      // Enviar correo al cliente si tiene email
-      if (quote.email) {
-        await sendQuoteEmail(quote);
-      }
-      
-      // Enviar notificación al administrador
       await sendAdminNotification(quote, 'completa');
     } catch (emailError) {
-      console.error('Error enviando correos:', emailError);
-      // No fallar la solicitud solo por error de correo
+      console.error('Error enviando notificación admin:', emailError);
     }
     
     res.status(201).json({ 
-      message: 'Cotización generada', 
-      anual: estimate.anual,
-      mensual: estimate.mensual,
+      message: 'Solicitud recibida. Te contactaremos pronto.', 
       quoteId: quote._id 
     });
     
@@ -81,15 +55,14 @@ exports.createQuote = async (req, res) => {
   }
 };
 
+
+// Modificar createQuickQuote de manera similar
 exports.createQuickQuote = async (req, res) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) return res.status(400).json({ errors: errors.array() });
   
   try {
     const { nombre, tel, marca, modelo, cp, paquete } = req.body;
-    
-    const normalizedPaquete = paquete === 'Responsabilidad civil' ? 'Responsabilidad Civil' : paquete;
-    const estimate = computeEstimate({ paquete: normalizedPaquete });
     
     const quote = new Quote({
       name: nombre,
@@ -98,37 +71,25 @@ exports.createQuickQuote = async (req, res) => {
       model: modelo,
       vehicle: `${marca} ${modelo}`,
       postalCode: cp,
-      plan: normalizedPaquete,
-      estimatedAnnual: estimate.anual,
-      estimatedMonthly: estimate.mensual,
-      status: 'quick_quote',
+      plan: paquete,
+      estimatedAnnual: 0, // Sin precios
+      estimatedMonthly: 0,
+      status: 'contact_request', // Nuevo estado
       quoteType: 'quick',
       usage: 'No especificado'
     });
     
     await quote.save();
     
-    // ENVIAR NOTIFICACIÓN AL ADMIN - Agregar esto
+    // ENVIAR SOLO NOTIFICACIÓN AL ADMINISTRADOR
     try {
       await sendAdminNotification(quote, 'rápida');
     } catch (emailError) {
       console.error('Error enviando notificación admin:', emailError);
-      // No fallar la solicitud solo por error de correo
     }
     
-    const formatPrice = (price) => {
-      return new Intl.NumberFormat('es-MX', {
-        style: 'currency',
-        currency: 'MXN',
-        minimumFractionDigits: 0,
-        maximumFractionDigits: 0
-      }).format(price);
-    };
-    
     res.status(201).json({
-      message: 'Cotización rápida generada',
-      anual: formatPrice(estimate.anual),
-      mensual: formatPrice(estimate.mensual),
+      message: 'Solicitud recibida. Te contactaremos pronto.',
       quoteId: quote._id
     });
     
