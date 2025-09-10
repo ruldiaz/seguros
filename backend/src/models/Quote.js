@@ -19,7 +19,7 @@ const quoteSchema = new mongoose.Schema({
   },
   plan: { 
     type: String, 
-    enum: ['Responsabilidad Civil', 'Limitada', 'Amplia', 'Responsabilidad civil'], 
+    enum: ['Responsabilidad Civil', 'Limitada', 'Amplia'], 
     required: true 
   },
   estimatedAnnual: { type: Number },

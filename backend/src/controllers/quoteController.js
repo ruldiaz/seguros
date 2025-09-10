@@ -2,16 +2,16 @@ const { validationResult } = require('express-validator');
 const Quote = require('../models/Quote');
 const { sendQuoteEmail, sendAdminNotification } = require('../utils/mailer'); // Agregar sendAdminNotification
 
-// Reemplazar la función computeEstimate para que no calcule precios
+// En quoteController.js
 function computeEstimate() {
-  // Ya no calculamos precios, solo devolvemos valores nulos o mensaje
+  // Ya no calculamos precios, devolvemos 0
   return { 
     anual: 0, 
     mensual: 0 
   };
 }
 
-// Modificar createQuote para no enviar correos con precios
+// En quoteController.js
 exports.createQuote = async (req, res) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) return res.status(400).json({ errors: errors.array() });
@@ -30,14 +30,14 @@ exports.createQuote = async (req, res) => {
       postalCode: payload.cp || payload.postalCode,
       usage: payload.uso || payload.usage,
       plan: payload.plan,
-      estimatedAnnual: 0, // Ya no almacenamos precios
+      estimatedAnnual: 0,
       estimatedMonthly: 0,
-      status: 'contact_request' // Nuevo estado
+      status: 'pending', // Usa 'pending' en lugar de 'contact_request'
+      quoteType: 'full'
     });
     
     await quote.save();
     
-    // ENVIAR SOLO NOTIFICACIÓN AL ADMINISTRADOR (sin precios)
     try {
       await sendAdminNotification(quote, 'completa');
     } catch (emailError) {
@@ -55,14 +55,14 @@ exports.createQuote = async (req, res) => {
   }
 };
 
-
-// Modificar createQuickQuote de manera similar
 exports.createQuickQuote = async (req, res) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) return res.status(400).json({ errors: errors.array() });
   
   try {
     const { nombre, tel, marca, modelo, cp, paquete } = req.body;
+    
+    const normalizedPaquete = paquete === 'Responsabilidad civil' ? 'Responsabilidad Civil' : paquete;
     
     const quote = new Quote({
       name: nombre,
@@ -71,17 +71,16 @@ exports.createQuickQuote = async (req, res) => {
       model: modelo,
       vehicle: `${marca} ${modelo}`,
       postalCode: cp,
-      plan: paquete,
-      estimatedAnnual: 0, // Sin precios
+      plan: normalizedPaquete,
+      estimatedAnnual: 0,
       estimatedMonthly: 0,
-      status: 'contact_request', // Nuevo estado
+      status: 'quick_quote', // Usa 'quick_quote' que ya existe en el enum
       quoteType: 'quick',
       usage: 'No especificado'
     });
     
     await quote.save();
     
-    // ENVIAR SOLO NOTIFICACIÓN AL ADMINISTRADOR
     try {
       await sendAdminNotification(quote, 'rápida');
     } catch (emailError) {
