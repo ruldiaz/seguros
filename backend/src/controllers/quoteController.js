@@ -1,6 +1,6 @@
 const { validationResult } = require('express-validator');
 const Quote = require('../models/Quote');
-const { sendQuoteEmail } = require('../utils/mailer');
+const { sendQuoteEmail, sendAdminNotification } = require('../utils/mailer'); // Agregar sendAdminNotification
 
 function computeEstimate({ plan, usage, year, paquete }){
   // Normalizar el nombre del plan/paquete
@@ -29,7 +29,6 @@ function computeEstimate({ plan, usage, year, paquete }){
   };
 }
 
-// Cotización completa (existente)
 exports.createQuote = async (req, res) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) return res.status(400).json({ errors: errors.array() });
@@ -54,7 +53,20 @@ exports.createQuote = async (req, res) => {
     });
     
     await quote.save();
-    sendQuoteEmail(quote).catch(err => console.error('Mailer error', err));
+    
+    // ENVIAR CORREOS - Modificar esta parte
+    try {
+      // Enviar correo al cliente si tiene email
+      if (quote.email) {
+        await sendQuoteEmail(quote);
+      }
+      
+      // Enviar notificación al administrador
+      await sendAdminNotification(quote, 'completa');
+    } catch (emailError) {
+      console.error('Error enviando correos:', emailError);
+      // No fallar la solicitud solo por error de correo
+    }
     
     res.status(201).json({ 
       message: 'Cotización generada', 
@@ -69,7 +81,6 @@ exports.createQuote = async (req, res) => {
   }
 };
 
-// Nueva función para cotización rápida
 exports.createQuickQuote = async (req, res) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) return res.status(400).json({ errors: errors.array() });
@@ -77,9 +88,7 @@ exports.createQuickQuote = async (req, res) => {
   try {
     const { nombre, tel, marca, modelo, cp, paquete } = req.body;
     
-    // Normalizar el nombre del paquete para que coincida con las opciones del modelo
     const normalizedPaquete = paquete === 'Responsabilidad civil' ? 'Responsabilidad Civil' : paquete;
-    
     const estimate = computeEstimate({ paquete: normalizedPaquete });
     
     const quote = new Quote({
@@ -87,19 +96,26 @@ exports.createQuickQuote = async (req, res) => {
       phone: tel,
       brand: marca,
       model: modelo,
-      vehicle: `${marca} ${modelo}`, // Crear vehicle a partir de marca y modelo
+      vehicle: `${marca} ${modelo}`,
       postalCode: cp,
       plan: normalizedPaquete,
       estimatedAnnual: estimate.anual,
       estimatedMonthly: estimate.mensual,
       status: 'quick_quote',
       quoteType: 'quick',
-      usage: 'No especificado' // Valor por defecto para cotizaciones rápidas
+      usage: 'No especificado'
     });
     
     await quote.save();
     
-    // Formatear precios para mostrar en frontend
+    // ENVIAR NOTIFICACIÓN AL ADMIN - Agregar esto
+    try {
+      await sendAdminNotification(quote, 'rápida');
+    } catch (emailError) {
+      console.error('Error enviando notificación admin:', emailError);
+      // No fallar la solicitud solo por error de correo
+    }
+    
     const formatPrice = (price) => {
       return new Intl.NumberFormat('es-MX', {
         style: 'currency',
@@ -119,7 +135,6 @@ exports.createQuickQuote = async (req, res) => {
   } catch (err) {
     console.error('Error en createQuickQuote:', err);
     
-    // Manejar errores de validación de Mongoose de manera más específica
     if (err.name === 'ValidationError') {
       const errors = Object.values(err.errors).map(error => error.message);
       return res.status(400).json({ 
