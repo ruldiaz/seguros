@@ -6,9 +6,9 @@
     <meta name="google-site-verification" content="sOquvg3EZsxERwmcw0h9sTGPXNwIeg8tXrpX1QN-tNY" />
     <meta
       name="description"
-      content="Cotiza tu seguro automotriz con AIT Seguros en Tuxtla Gutierrez, Chiapas. Atencion humana, opciones claras y contacto rapido."
+      content="Asesoria para seguros personales y familiares con AIT Seguros en Tuxtla Gutierrez, Chiapas."
     />
-    <title>AIT Seguros | Seguro para auto en Tuxtla Gutierrez</title>
+    <title>AIT Seguros | Asesoria en seguros personales y familiares</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -30,86 +30,160 @@
           <span></span>
         </button>
         <div class="nav-menu" id="nav-menu">
+          <a href="#proteger">Qué proteger</a>
           <a href="#beneficios">Beneficios</a>
           <a href="#planes">Planes</a>
-          <a href="#cotizar">Cotizar</a>
+          <a href="#proteger">Cotizar</a>
           <a href="#contacto">Contacto</a>
         </div>
       </nav>
 
       <section class="hero container">
         <div class="hero-copy">
-          <p class="eyebrow">Seguros para auto en Tuxtla Gutierrez</p>
+          <p class="eyebrow">Seguros personales y familiares</p>
           <h1>AIT Seguros</h1>
           <p>
-            Cotiza tu seguro automotriz con atencion cercana, opciones claras y seguimiento por telefono
-            o WhatsApp.
+            Recibe asesoria para proteger tu auto, tu salud, tu hogar o tu patrimonio familiar con
+            seguimiento directo por telefono o WhatsApp.
           </p>
           <div class="hero-actions">
-            <a class="button primary" href="#cotizar">Cotizar ahora</a>
+            <a class="button primary" href="#proteger">Elegir qué proteger</a>
             <a class="button secondary" href="tel:+529616158126">Llamar</a>
           </div>
         </div>
 
+        <div class="quote-card hero-panel">
+          <div class="form-heading">
+            <span>Producto principal</span>
+            <strong>Seguro de Auto</strong>
+          </div>
+          <p class="panel-copy">
+            Auto sigue siendo el producto principal. También puedes dejar tus datos para Vida,
+            Salud, Hogar o Protección personal desde un solo formulario.
+          </p>
+          <a class="button primary full" href="#proteger">Iniciar solicitud</a>
+        </div>
+      </section>
+    </header>
+
+    <main>
+      <section class="section container protect-section" id="proteger">
+        <div class="section-heading">
+          <p class="eyebrow">Asesoria inicial</p>
+          <h2>¿Qué quieres proteger?</h2>
+        </div>
+        <div class="need-grid" aria-label="Opciones de protección">
+          <a class="need-card is-active" href="#lead-interest" data-product-target="auto">
+            <span>Auto</span>
+            <strong>Seguro de Auto</strong>
+            <small>Solicitud con datos del vehículo.</small>
+          </a>
+          <button class="need-card" type="button" data-product-target="vida">
+            <span>Vida</span>
+            <strong>Seguro de Vida</strong>
+            <small>Solicitud de información para asesoría.</small>
+          </button>
+          <button class="need-card" type="button" data-product-target="salud">
+            <span>Salud</span>
+            <strong>Gastos Médicos / Salud</strong>
+            <small>Captura inicial de interés.</small>
+          </button>
+          <button class="need-card" type="button" data-product-target="hogar">
+            <span>Hogar</span>
+            <strong>Seguro de Hogar</strong>
+            <small>Datos básicos para seguimiento.</small>
+          </button>
+          <button class="need-card" type="button" data-product-target="proteccion_personal">
+            <span>Protección personal</span>
+            <strong>Accidentes / RC personal</strong>
+            <small>Orientación inicial sin cotizador complejo.</small>
+          </button>
+        </div>
+
         <form
-          class="quote-card"
-          id="quick-quote"
-          name="quick-quote"
+          class="interest-form"
+          id="lead-interest"
+          name="lead-interest"
           method="POST"
           action="/gracias/"
           data-netlify="true"
           netlify-honeypot="bot-field"
         >
-          <input type="hidden" name="form-name" value="quick-quote" />
-          <p class="hidden">
-            <label>No llenar: <input name="bot-field" /></label>
-          </p>
+          <input type="hidden" name="form-name" value="lead-interest" />
+          <input type="hidden" name="source" value="landing-lead-interest" data-tracking-field="source" />
+          <input type="hidden" name="utm_source" data-tracking-field="utm_source" />
+          <input type="hidden" name="utm_medium" data-tracking-field="utm_medium" />
+          <input type="hidden" name="utm_campaign" data-tracking-field="utm_campaign" />
+          <input type="hidden" name="landing_page" data-tracking-field="landing_page" />
+          <input type="hidden" name="created_at" data-tracking-field="created_at" />
+          <p class="hidden"><label>No llenar: <input name="bot-field" /></label></p>
+
           <div class="form-heading">
-            <span>Cotizacion rapida</span>
-            <strong>Te contactamos pronto</strong>
+            <span>Solicitud de asesoria</span>
+            <strong>Cuéntame qué quieres proteger</strong>
+          </div>
+
+          <label>
+            Tipo de seguro
+            <select name="product_interest" id="product-interest" required>
+              <option value="auto" selected>Auto</option>
+              <option value="vida">Vida</option>
+              <option value="salud">Gastos Médicos / Salud</option>
+              <option value="hogar">Hogar</option>
+              <option value="proteccion_personal">Protección personal</option>
+            </select>
+          </label>
+
+          <div class="field-grid two">
+            <label>Nombre <input name="nombre" autocomplete="name" required minlength="2" placeholder="Tu nombre" /></label>
+            <label>WhatsApp <input name="telefono" autocomplete="tel" inputmode="tel" required minlength="10" placeholder="961 000 0000" /></label>
           </div>
           <div class="field-grid two">
-            <label>
-              Nombre
-              <input name="nombre" autocomplete="name" required minlength="2" placeholder="Tu nombre" />
-            </label>
-            <label>
-              Telefono
-              <input name="telefono" autocomplete="tel" inputmode="tel" required minlength="10" placeholder="961 000 0000" />
-            </label>
+            <label>Email <input name="email" type="email" autocomplete="email" required placeholder="correo@dominio.com" /></label>
+            <label>Ciudad / estado <input name="ciudad_estado" required minlength="2" placeholder="Tuxtla Gutierrez, Chiapas" /></label>
           </div>
-          <div class="field-grid two">
+
+          <fieldset class="auto-fields" data-auto-fields>
+            <legend>Datos del auto</legend>
+            <div class="field-grid two">
+              <label>Vehículo <input name="vehiculo" required minlength="2" placeholder="Mazda 3" data-auto-required /></label>
+              <label>Año <input name="anio" required pattern="(19|20)[0-9]{2}" inputmode="numeric" placeholder="2022" data-auto-required /></label>
+            </div>
+            <div class="field-grid two">
+              <label>Código postal <input name="codigo_postal" required pattern="[0-9]{5}" inputmode="numeric" placeholder="29000" data-auto-required /></label>
+              <label>
+                Cobertura de interés
+                <select name="cobertura" required data-auto-required>
+                  <option value="">Selecciona</option>
+                  <option>Responsabilidad Civil</option>
+                  <option>Limitada</option>
+                  <option>Amplia</option>
+                </select>
+              </label>
+            </div>
             <label>
-              Marca
-              <input name="marca" required minlength="2" placeholder="Nissan" />
-            </label>
-            <label>
-              Modelo
-              <input name="modelo" required minlength="2" placeholder="Versa 2022" />
-            </label>
-          </div>
-          <div class="field-grid two">
-            <label>
-              Codigo postal
-              <input name="codigo_postal" required pattern="[0-9]{5}" inputmode="numeric" placeholder="29000" />
-            </label>
-            <label>
-              Cobertura
-              <select name="cobertura" required>
+              Uso del vehículo
+              <select name="uso">
                 <option value="">Selecciona</option>
-                <option>Amplia</option>
-                <option>Limitada</option>
-                <option>Responsabilidad Civil</option>
+                <option>Personal</option>
+                <option>Uber/Didi</option>
+                <option>Comercial</option>
               </select>
             </label>
+          </fieldset>
+
+          <label>
+            Mensaje opcional
+            <textarea name="mensaje" rows="4" placeholder="Cuéntame brevemente qué necesitas revisar."></textarea>
+          </label>
+
+          <div class="form-footer">
+            <button class="button primary" type="submit">Enviar solicitud</button>
+            <p class="form-status">Tus datos se usarán solo para dar seguimiento a tu solicitud.</p>
           </div>
-          <button class="button primary full" type="submit">Solicitar informacion</button>
-          <p class="form-status" data-status-for="quick-quote" role="status">Listo para recibir tus datos.</p>
         </form>
       </section>
-    </header>
 
-    <main>
       <section class="section container" id="beneficios">
         <div class="section-heading">
           <p class="eyebrow">Atencion local</p>
@@ -155,83 +229,6 @@
             </article>
           </div>
         </div>
-      </section>
-
-      <section class="section container quote-section" id="cotizar">
-        <div class="section-heading">
-          <p class="eyebrow">Cotizacion completa</p>
-          <h2>Comparte los datos de tu vehiculo</h2>
-        </div>
-        <form
-          class="full-form"
-          id="full-quote"
-          name="full-quote"
-          method="POST"
-          action="/gracias/"
-          data-netlify="true"
-          netlify-honeypot="bot-field"
-        >
-          <input type="hidden" name="form-name" value="full-quote" />
-          <p class="hidden">
-            <label>No llenar: <input name="bot-field" /></label>
-          </p>
-          <div class="field-grid two">
-            <label>
-              Nombre completo
-              <input name="nombre_completo" autocomplete="name" required minlength="2" placeholder="Nombre y apellidos" />
-            </label>
-            <label>
-              Correo electronico
-              <input name="email" type="email" autocomplete="email" required placeholder="correo@dominio.com" />
-            </label>
-          </div>
-          <div class="field-grid two">
-            <label>
-              WhatsApp
-              <input name="whatsapp" autocomplete="tel" inputmode="tel" required minlength="10" placeholder="+52 961 000 0000" />
-            </label>
-            <label>
-              Codigo postal
-              <input name="codigo_postal" required pattern="[0-9]{5}" inputmode="numeric" placeholder="29000" />
-            </label>
-          </div>
-          <div class="field-grid three">
-            <label>
-              Vehiculo
-              <input name="vehiculo" required minlength="2" placeholder="Mazda 3" />
-            </label>
-            <label>
-              Ano
-              <input name="anio" required pattern="(19|20)[0-9]{2}" inputmode="numeric" placeholder="2022" />
-            </label>
-            <label>
-              Uso
-              <select name="uso" required>
-                <option value="">Selecciona</option>
-                <option>Personal</option>
-                <option>Uber/Didi</option>
-                <option>Comercial</option>
-              </select>
-            </label>
-          </div>
-          <label>
-            Cobertura de interes
-            <select name="cobertura" required>
-              <option value="">Selecciona</option>
-              <option>Responsabilidad Civil</option>
-              <option>Limitada</option>
-              <option>Amplia</option>
-            </select>
-          </label>
-          <label>
-            Comentarios
-            <textarea name="comentarios" rows="4" placeholder="Cuentanos si tienes aseguradora actual, placas o algun detalle importante."></textarea>
-          </label>
-          <div class="form-footer">
-            <button class="button primary" type="submit">Enviar solicitud</button>
-            <p class="form-status" data-status-for="full-quote" role="status">Tus datos se usaran solo para contactarte.</p>
-          </div>
-        </form>
       </section>
 
       <section class="section contact-band" id="contacto">

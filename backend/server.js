@@ -5,6 +5,7 @@ const morgan = require('morgan');
 const { connectDB } = require('./src/utils/db');
 const authRoutes = require('./src/routes/auth');
 const quoteRoutes = require('./src/routes/quotes');
+const leadRoutes = require('./src/routes/leads');
 
 dotenv.config();
 
@@ -12,19 +13,21 @@ const app = express();
 
 // Configuración CORS más específica
 app.use(cors({
-  origin: ['https://aitseguros.netlify.app','http://localhost:3000', 'http://127.0.0.1:3000', 'http://localhost:5500', 'http://127.0.0.1:5500'],
+  origin: ['https://aitseguros.netlify.app','http://localhost:3000', 'http://127.0.0.1:3000', 'http://localhost:5173', 'http://127.0.0.1:5173', 'http://localhost:5500', 'http://127.0.0.1:5500'],
   credentials: true,
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization', 'Accept']
 }));
 
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 app.use(morgan('dev'));
 
 // routes
 app.get('/', (req, res) => res.send({ ok: true, service: 'SegurAuto API' }));
 app.use('/api/auth', authRoutes);
 app.use('/api/quotes', quoteRoutes);
+app.use('/api/leads', leadRoutes);
 
 const PORT = process.env.PORT || 4000;
 

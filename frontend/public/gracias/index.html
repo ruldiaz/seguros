@@ -52,12 +52,18 @@
         line-height: 1.6;
       }
 
+      .actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        margin-top: 12px;
+      }
+
       a {
         display: inline-flex;
         align-items: center;
         justify-content: center;
         min-height: 48px;
-        margin-top: 12px;
         border-radius: 8px;
         padding: 0 18px;
         background: var(--blue);
@@ -65,14 +71,24 @@
         font-weight: 800;
         text-decoration: none;
       }
+
+      a.secondary {
+        background: transparent;
+        color: var(--blue);
+        border: 1px solid rgba(11, 102, 195, 0.3);
+      }
     </style>
   </head>
   <body>
     <main>
       <p>Solicitud recibida</p>
       <h1>Gracias</h1>
-      <p>Recibimos tus datos. Te contactaremos pronto para revisar opciones de seguro para tu auto.</p>
-      <a href="/">Volver al inicio</a>
+      <p>Recibimos tus datos. Te contactaremos pronto para revisar tu solicitud.</p>
+      <p>¿Quieres atención más rápida? Escríbeme por WhatsApp.</p>
+      <div class="actions">
+        <a href="https://wa.me/529616158126">Escribir por WhatsApp</a>
+        <a class="secondary" href="/">Volver al inicio</a>
+      </div>
     </main>
   </body>
 </html>
